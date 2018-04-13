@@ -1,0 +1,8 @@
+Se ha usado el algoritmo G-INS-i, que mejora la precision, y minimiza el numero de 
+gaps. Ademas, es el recomendado para secuencias de un mismo origen, en este caso, una
+misma poblacion.
+En adicion, para asegurarse de que las longitudes son minimas respecto a las originales,
+se ha especificado la opcion gaps = 5, que es el valor maximo para abrir gaps. De esta
+forma, se pretende que no añada muchos gaps.
+
+Tiempo: 2/3 minutos aprox

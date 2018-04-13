@@ -1,0 +1,3 @@
+Num. sequences: 150
+History:
+2016/03/16 12:52:00    entrez    nuccore    "Influenza A virus"[Organism] AND neuraminidase[Title] NOT mRNA[Filter]
