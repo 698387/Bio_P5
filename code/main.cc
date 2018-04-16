@@ -12,6 +12,7 @@
 #include <vector>
 #include <array>
 #include <iomanip>
+#include <cmath>
 
 #include "SeqReader.h"
 
@@ -69,9 +70,9 @@ int main(int argc, char* argv[])
 	
 	vector<string> sequences = readFastaSeq(argv[1]);
 	vector<string> aligned_sequences = readFastaSeq(argv[2]);
-	
 	// Busca la secuencia mas larga
 	unsigned int longest_seq = 0;
+	unsigned int n_seq = 0;
 	for (vector<string>::const_iterator it = sequences.begin(); 
 			it != sequences.end(); it++)
 	{
@@ -80,24 +81,41 @@ int main(int argc, char* argv[])
 			longest_seq = seq_length;
 	}
 	
+	n_seq = sequences.size();
+	
 	// Las secuencias alineadas, tienen todas el mismo tamanyo
 	cout << "Ratio de incremento de la longitud: " 
 		<< (double)aligned_sequences[0].length() / (double) longest_seq << endl;
 		
 	vector<array<unsigned int, 5>> count = countNucleotids(aligned_sequences);
+	vector<array<double, 4>> freq;
+	freq.reserve(count.size());
 	
-	ofstream f("frecuencia_nucleotidos.txt");
-	f << setw(6) << "Pos" << setw(8) << "G" << setw(8) << "A" << setw(8) << "T" 
-		<< setw(8) << "C" << setw(8) << "-" << endl;	
-	for (int i = 0; i < count.size(); i++)
+	for (vector<array<unsigned int, 5>>::const_iterator it = count.begin();
+		it != count.end(); it++)
 	{
-		f << setw(6) << i;
-		for (int j = 0; j < 5; j++)
-			f << setw(8) << count[i][j];
-			
-		f << endl;
+		const double n_nucleotids = n_seq - (*it)[4];
+		array<double, 4> vn {{(double)(*it)[0] / n_nucleotids,
+								(double)(*it)[1] / n_nucleotids,
+								(double)(*it)[2] / n_nucleotids,
+								(double)(*it)[3] / n_nucleotids }};
+		freq.push_back(vn);
 	}
-	//f.close();
+		
+	ofstream f;
+	f.open("idx_conservacion.txt");
 	
+	f << setw(6) << "Pos" << setw(20) << "Idx_Cons" << endl;
+	int id = 1;
+	for (vector<array<double, 4>>::const_iterator it = freq.begin(); 
+		it != freq.end(); it++)
+	{	
+		double sum = ( (*it)[0] * log((*it)[0]) ) 
+					+ ( (*it)[1] * log((*it)[1]) )
+					+ ( (*it)[2] * log((*it)[2]) )
+					+ ( (*it)[3] * log((*it)[3]) ); 
+		f << setw(6) << id << setw(20) << sum << endl;		
+		id++;	
+	}
 	return 0;
 }
