@@ -110,10 +110,10 @@ int main(int argc, char* argv[])
 	for (vector<array<double, 4>>::const_iterator it = freq.begin(); 
 		it != freq.end(); it++)
 	{	
-		double sum = ( (*it)[0] * log((*it)[0]) ) 
-					+ ( (*it)[1] * log((*it)[1]) )
-					+ ( (*it)[2] * log((*it)[2]) )
-					+ ( (*it)[3] * log((*it)[3]) ); 
+		double sum =  ( ((*it)[0] == 0)? 0: (*it)[0] * log((*it)[0]) ) 
+					+ ( ((*it)[1] == 0)? 0: (*it)[1] * log((*it)[1]) )
+					+ ( ((*it)[2] == 0)? 0: (*it)[2] * log((*it)[2]) )
+					+ ( ((*it)[3] == 0)? 0: (*it)[3] * log((*it)[3]) ); 
 		f << setw(6) << id << setw(20) << sum << endl;		
 		id++;	
 	}
